@@ -4,8 +4,8 @@ import { MongooseModule } from "@nestjs/mongoose";
 
 import { Meal, MealSchema } from "src/schemas";
 
-// import { ManageController } from "./manage.controller";
-import { ManageService } from "./manage.service";
+import { ClientController } from "./client.controller";
+import { ClientService } from "./client.service";
 
 @Module({
   imports: [
@@ -15,9 +15,8 @@ import { ManageService } from "./manage.service";
         schema: MealSchema,
       },
     ]),
-    HttpModule,
   ],
-  // controllers: [ManageController],
-  providers: [ManageService],
+  controllers: [ClientController],
+  providers: [ClientService],
 })
-export class ManageModule {}
+export class ClientModule {}

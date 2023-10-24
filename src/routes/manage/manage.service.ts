@@ -22,7 +22,7 @@ export class ManageService {
 
   private async getMealList(): Promise<any> {
     const response = await this.httpService.axiosRef.get(
-      "https://www.dimigo.hs.kr/index.php?mid=school_cafeteria",
+      "https://www.dimigo.hs.kr/index.php?mid=school_cafeteria&page=1",
     );
     const $ = cheerio.load(response.data);
 
@@ -77,7 +77,7 @@ export class ManageService {
     return meal;
   }
 
-  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
+  @Cron(CronExpression.EVERY_3_HOURS)
   async updateMeals(): Promise<Meal[]> {
     const mealList = await this.getMealList();
     const list = [];
@@ -96,7 +96,9 @@ export class ManageService {
       };
       data.id = meal["번호"] * 1;
       const splittedTitle = meal["제목"].split("월");
-      data.year = moment().year();
+      if (splittedTitle.length < 2) continue;
+
+      data.year = meal["등록일"].split("-")[0];
       data.month = splittedTitle[0].replace(/[^0-9]/g, "");
       data.day = splittedTitle[1].replace(/[^0-9]/g, "");
 
